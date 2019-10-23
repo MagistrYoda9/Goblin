@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal") * speed;
-        transform.Translate(Vector2.right * Time.deltaTime * horizontalInput);
+        transform.Translate(Vector2.right * Time.deltaTime * (int)horizontalInput);
         playerDirection(horizontalInput);
         if (Input.GetButtonDown("Jump"))
         {
