@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    bool jumpRequest = false;
     private bool isOnGound = true;
     public float speed = 20;
     public float jumpForce = 3;
@@ -27,12 +28,19 @@ public class PlayerController : MonoBehaviour
         playerDirection(horizontalInput);
         if (Input.GetButtonDown("Jump"))
         {
-            playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumpRequest = true;
         }
-        
-
     }
 
+    private void FixedUpdate()
+    {
+        if (jumpRequest)
+        {
+            playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumpRequest = false;
+        }
+
+    }
     private void playerDirection(float direction)
     {
 
