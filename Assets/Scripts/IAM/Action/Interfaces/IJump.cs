@@ -5,5 +5,4 @@ using UnityEngine;
 public interface IJumpRb
 {
     void Jump(float jumpForce);
- 
 }

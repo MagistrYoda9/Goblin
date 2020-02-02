@@ -6,6 +6,12 @@ public class PlayerScript : MonoBehaviour
 {
     IMovement movementScript;
     IJumpRb jumpRb;
+    IAnimations animations;
+    Animator animator;
+    private SpriteRenderer playerSprite;
+    float horizontalInput;
+    bool isGrounded = true;
+
 
     bool jumpRequest = false;
     public float speed = 20;
@@ -16,21 +22,40 @@ public class PlayerScript : MonoBehaviour
     {
         movementScript = new BasicMovement(gameObject);
         jumpRb = new BasicJump(gameObject);
+        animations = new BasicAnimations(gameObject);
+        animator = GetComponent<Animator>();
+        playerSprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        movementScript.HorizontalMovement(speed, Input.GetAxis("Horizontal"));
+        horizontalInput = Input.GetAxis("Horizontal");
+        if (horizontalInput != 0)
+        {
+            movementScript.HorizontalMovement(speed, horizontalInput);
+            animations.MovementAnimation("isRunning", true, horizontalInput);
+        }
+        else
+        {
+            animations.MovementAnimation("isRunning", false, horizontalInput);
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             jumpRequest = true;
+            isGrounded = false;
         }
+    }
+
+    private void OnCollisionStay2D()
+    {
+        isGrounded = true;
     }
 
     private void FixedUpdate()
     {
-        if (jumpRequest)
+        if (jumpRequest && isGrounded)
         {
             jumpRb.Jump(jumpForce);
             jumpRequest = false;
